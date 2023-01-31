@@ -20,13 +20,15 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ButtonGroup;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class VentanaEnvios extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtOrigen;
 	private JTextField txtDestino;
-	private JTextField txtPeso;
+	private JSpinner spinner;
 	private final ButtonGroup grupoOrigen = new ButtonGroup();
 	private final ButtonGroup grupoDestino = new ButtonGroup();
 	private JComboBox comboBox;
@@ -112,9 +114,9 @@ public class VentanaEnvios extends JFrame {
 		JLabel lblNewLabel_4 = new JLabel("Peso:");
 		contentPane.add(lblNewLabel_4, "cell 0 6,alignx trailing");
 		
-		txtPeso = new JTextField();
-		contentPane.add(txtPeso, "cell 1 6,growx");
-		txtPeso.setColumns(10);
+		spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(1, 1, 40, 1));
+		contentPane.add(spinner, "cell 1 6,growx");
 		
 		JLabel lblNewLabel_5 = new JLabel("Kg:");
 		contentPane.add(lblNewLabel_5, "cell 2 6");
@@ -129,12 +131,11 @@ public class VentanaEnvios extends JFrame {
 	}
 
 	protected void calcularEnvío() {
-		try {
 			String origen = txtOrigen.getText();
 			String destino = txtDestino.getText();
 			String textoTipo = (String) comboBox.getSelectedItem();
 			int tipo = comboBox.getSelectedIndex();
-			int peso = Integer.parseInt(txtPeso.getText());
+			int peso = (int) spinner.getValue();
 			
 			if (origen==null || origen.isBlank() ||
 				destino==null || destino.isBlank() ) {
@@ -144,12 +145,7 @@ public class VentanaEnvios extends JFrame {
 				return;
 			}
 			
-			if (peso<1 || peso >40 ) {
-				JOptionPane.showMessageDialog(this, 
-						"El peso del paquete debe estar entre 1 y 40", 
-						"Peso incorrecto", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
+
 			
 			double precio=7;
 			if (rdbNacional.isSelected() && rdbNacional_1.isSelected()) {
@@ -167,15 +163,7 @@ public class VentanaEnvios extends JFrame {
 					"Origen: "+origen+"\nDestino: "+destino+
 					"\nTipo: "+textoTipo+"\nPeso:"+peso+ "Kg\nImporte:"+precio+ " €", 
 					"Cálculo", JOptionPane.INFORMATION_MESSAGE);
-			
-		}catch (NumberFormatException e ) {
-			JOptionPane.showMessageDialog(this, 
-					"Debe introducir un número correcto en el peso", 
-					"Peso incorrecto", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		
-		
+	
 		
 	}
 
